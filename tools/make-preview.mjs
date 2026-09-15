@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const site=path.join(root,fs.existsSync(path.join(root,'docs'))?'docs':'dist');
+const css=fs.readFileSync(path.join(site,'assets/style.css'),'utf8');
+const content=fs.readFileSync(path.join(site,'assets/content.js'),'utf8').replace(/^export /gm,'');
+const engine=fs.readFileSync(path.join(site,'assets/engine.js'),'utf8').replace(/^export /gm,'');
+const app=fs.readFileSync(path.join(site,'assets/app.js'),'utf8').replace(/^import .*;\n/gm,'');
+const js=(content+'\n'+engine+'\nconst esc=escapeHTML;\n'+app).replace(/<\/script/gi,'<\\/script');
+const html=fs.readFileSync(path.join(site,'index.html'),'utf8').replace('<link rel="stylesheet" href="./assets/style.css">',()=>'<style>\n'+css+'\n</style>').replace('<script type="module" src="./assets/app.js"></script>',()=>'<script type="module">\n'+js+'\n</script>');
+fs.writeFileSync(path.join(root,'preview.html'),html);
+console.log('Created preview.html. Open it directly in a modern browser.');

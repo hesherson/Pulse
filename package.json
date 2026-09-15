@@ -1,0 +1,12 @@
+{
+  "name": "pulse-paramedic-study",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A static, source-linked paramedic study workspace for GitHub Pages.",
+  "scripts": {
+    "test": "node --test tests/verify.mjs",
+    "start": "node tools/serve.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
